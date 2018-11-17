@@ -1,0 +1,194 @@
+<html>
+
+<head>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+	</script>
+	<script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/12835_17_JCLive_sf2_file.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/12840_1_JCLive_sf2_file.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/12842_1_JCLive_sf2_file.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/12851_1_JCLive_sf2_file.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/12850_1_JCLive_sf2_file.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/12848_1_JCLive_sf2_file.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/12841_1_JCLive_sf2_file.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/0090_JCLive_sf2_file.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/0750_Chaos_sf2_file.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/0120_Chaos_sf2_file.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/0090_SBLive_sf2.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/0040_SBLive_sf2.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/1260_Aspirin_sf2_file.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/0100_FluidR3_GM_sf2_file.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/0750_FluidR3_GM_sf2_file.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/0350_GeneralUserGS_sf2_file.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/0120_FluidR3_GM_sf2_file.js'></script>
+	<style>
+		.messages {
+
+				  overflow: scroll;
+				  height: 400px;
+				  width: 100%;
+				}
+				.messages .message{
+					color:aliceblue;
+					width: 100%;
+
+
+				  float: left;
+				  }
+	
+		.thisform {
+
+				  display: inline;
+				  
+}
+.thisform .message {
+	width: 400px;
+}
+				
+				.thisform .sender{
+					margin-top:500px;
+
+				  text-align: right;
+				  background-color: #ddd;
+				}
+				
+		</style>
+	<script>
+		var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
+		var audioContext = new AudioContextFunc();
+		var player = new WebAudioFontPlayer();
+		player.loader.decodeAfterLoading(audioContext, '_drum_35_17_JCLive_sf2_file');
+		player.loader.decodeAfterLoading(audioContext, '_drum_40_1_JCLive_sf2_file');
+		player.loader.decodeAfterLoading(audioContext, '_drum_42_1_JCLive_sf2_file');
+		player.loader.decodeAfterLoading(audioContext, '_drum_51_1_JCLive_sf2_file');
+		player.loader.decodeAfterLoading(audioContext, '_drum_50_1_JCLive_sf2_file');
+		player.loader.decodeAfterLoading(audioContext, '_drum_48_1_JCLive_sf2_file');
+		player.loader.decodeAfterLoading(audioContext, '_drum_41_1_JCLive_sf2_file');
+		player.loader.decodeAfterLoading(audioContext, '_tone_0120_Chaos_sf2_file');
+		player.loader.decodeAfterLoading(audioContext, '_tone_0090_SBLive_sf2');
+		player.loader.decodeAfterLoading(audioContext, '_tone_0040_SBLive_sf2');
+		player.loader.decodeAfterLoading(audioContext, '_tone_1260_Aspirin_sf2_file');
+		player.loader.decodeAfterLoading(audioContext, '_tone_0100_FluidR3_GM_sf2_file');
+		player.loader.decodeAfterLoading(audioContext, '_tone_0750_FluidR3_GM_sf2_file');
+		player.loader.decodeAfterLoading(audioContext, '_tone_0350_GeneralUserGS_sf2_file');
+		player.loader.decodeAfterLoading(audioContext, '_tone_0120_FluidR3_GM_sf2_file');
+
+		var channelMaster = player.createChannel(audioContext);
+					var messages = [];
+
+		var reverberator = player.createReverberator(audioContext);
+		channelMaster.output.connect(reverberator.input);
+
+		player.createReverberator(audioContext);
+		reverberator.output.connect(audioContext.destination);
+		var instrument_lookup = [{
+			'0': _drum_35_17_JCLive_sf2_file,
+			'1': _drum_35_17_JCLive_sf2_file,
+			'2': _drum_35_17_JCLive_sf2_file,
+			'3': _tone_0120_FluidR3_GM_sf2_file,
+			'4': _tone_0120_FluidR3_GM_sf2_file,
+			'5': _drum_40_1_JCLive_sf2_file,
+			'6': _drum_40_1_JCLive_sf2_file,
+			'7': _tone_0120_FluidR3_GM_sf2_file,
+			'8': _tone_0750_FluidR3_GM_sf2_file,
+			'9': _tone_0750_FluidR3_GM_sf2_file,
+			'10': _tone_0750_FluidR3_GM_sf2_file,
+			'11': _tone_0350_GeneralUserGS_sf2_file,
+			'12': _tone_0350_GeneralUserGS_sf2_file,
+			'13': _tone_0350_GeneralUserGS_sf2_file,
+		},
+		{
+			'0': _drum_35_17_JCLive_sf2_file,
+			'1': _drum_35_17_JCLive_sf2_file,
+			'2': _drum_35_17_JCLive_sf2_file,
+			'3': _drum_35_17_JCLive_sf2_file,
+			'4': _drum_35_17_JCLive_sf2_file,
+			'5': _drum_40_1_JCLive_sf2_file,
+			'6': _drum_40_1_JCLive_sf2_file,
+			'7': _drum_35_17_JCLive_sf2_file,
+			'8': _drum_35_17_JCLive_sf2_file,
+			'9': _drum_35_17_JCLive_sf2_file,
+			'10': _drum_35_17_JCLive_sf2_file,
+			'11': _drum_35_17_JCLive_sf2_file,
+			'12': _drum_35_17_JCLive_sf2_file,
+			'13': _drum_35_17_JCLive_sf2_file,
+		}];
+		var instrumentBank = 0;
+		function switchInstrument() {
+			if (instrumentBank == 0) {
+				instrumentBank = 1;
+			} else {
+				instrumentBank = 0
+			}
+		};
+
+
+		// open connection
+		var evtSource = new EventSource("//{{ url }}/events");
+
+		// most important part - incoming messages
+		evtSource.onmessage = function (message) {
+			// try to parse JSON message. Because we know that the server
+			// always returns JSON this should work without any problem but
+			// we should make sure that the massage is not chunked or
+			// otherwise damaged.
+			var instrument_tuple = JSON.parse(message.data)
+
+			var instrument = instrument_lookup[instrumentBank][instrument_tuple.instrument]
+			if (instrument !== undefined) {
+				var elem = document.querySelector('#textThingy');
+				elem.innerHTML = message.data;
+
+
+				player.queueWaveTable(audioContext, channelMaster.input, instrument, 0, (12 * 4) + instrument_tuple.tone, instrument_tuple.decay, instrument_tuple.volume);
+			} else {
+				console.log(instrument_tuple)
+			}
+		};
+		$(function () {
+			var source = new EventSource("//{{ url }}/chat");
+			source.addEventListener('message', function (event) {
+				message = JSON.parse(event.data);
+				if (message.online) {
+					var elem = document.querySelector('#online');
+
+					elem.innerHTML = message.online + ` online`;
+					if (message.online == 1){
+						elem.innerHTML += ' (you)'
+					}
+				} else {
+					messages = ["<div class=message>" + message.message + "</div>", ...messages.slice(0,50)];		
+					$( ".messages" ).empty().append(messages)
+				}			
+
+			});
+			$('form').submit(function (e) {
+				e.preventDefault();
+				$.post('/everyone',
+					{
+						message: $('form .message').val().substring(0,140)
+					})
+				$('form .message').val('')
+			});
+		});
+	</script>
+</head>
+
+<body background="//{{ url }}/static/pellets.jpg" style="background-repeat: no-repeat; background-color: black">
+
+	<input type="range" value="0.5" min="0.0" max="1.5" step="0.1" onchange="reverberator.wet.gain.setTargetAtTime(value,0,0.0001);">
+	<div id="textThingy" style="color:aquamarine; text-align: right"></div>
+	<div style="text-align: right;"> <a href="https://sloev.github.io">Listen to Nabovarme and feel good by sloev</a></div>
+	<div><button id="clickMe" type="button" value="clickme" style="color: aliceblue" onclick="switchInstrument();" /></div>
+	<span>:</span>
+	<div class="thisform">
+		<form>
+			<input class="message" placeholder="Besked...(max 140 tegn)" />
+			<input class="sender" type="submit" value="Send" />
+			<div id="online" style="color:aquamarine;"></div>
+		</form>
+	</div>
+	<div class=messages></div>
+</body>
+
+</html>
