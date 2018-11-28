@@ -2,3 +2,6 @@ aiohttp-sse
 paho-mqtt==1.4.0
 psutil
 aiohttp-jinja2
+rtmidi
+git+https://github.com/louisabraham/python3-midi.git
+six

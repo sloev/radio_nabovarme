@@ -100,7 +100,7 @@
 			'5': _drum_40_1_JCLive_sf2_file,
 			'6': _drum_40_1_JCLive_sf2_file,
 			'7': _tone_0120_FluidR3_GM_sf2_file,
-			'8': _tone_0750_FluidR3_GM_sf2_file,
+			'8': _tone_0120_FluidR3_GM_sf2_file,
 			'9': _tone_0750_FluidR3_GM_sf2_file,
 			'10': _tone_0750_FluidR3_GM_sf2_file,
 			'11': _tone_0350_GeneralUserGS_sf2_file,
@@ -150,7 +150,7 @@
 				elem.innerHTML = message.data;
 
 
-				player.queueWaveTable(audioContext, channelMaster.input, instrument, 0, (12 * 4) + instrument_tuple.tone, instrument_tuple.decay, instrument_tuple.volume);
+				player.queueWaveTable(audioContext, channelMaster.input, instrument, 0, instrument_tuple.tone, instrument_tuple.decay, instrument_tuple.volume);
 			} else {
 				console.log(instrument_tuple)
 			}

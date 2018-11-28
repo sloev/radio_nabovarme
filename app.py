@@ -18,6 +18,54 @@ MAX_MESSAGES = 50
 URL = os.environ['URL']
 MQTT=os.environ['MQTT']
 
+import random
+import time
+
+from isobar import *
+print(dir(isobar.note))
+
+class Print:
+    """ SocketIOOut: Support for sending note on/off events via websockets.
+    Two types of event are sent at the moment:
+
+    note [ index, velocity, channel ] : The MIDI note number depressed.
+                                        For note-off, velocity is zero.
+    control [ index, value, channel ] : A MIDI control value 
+    """
+
+    def __init__(self, queue, instrument):
+        self.queue = queue
+        self.instrument = instrument
+
+    def tick(self, tick_length):
+        pass
+    def event(self, event):
+        try:
+            queue.put(json.dumps(dict(
+                    tone=event['note'],
+                    instrument=str(self.instrument),
+                    decay=event['dur'],
+                    volume=event['amp'] / 100
+                )), block=False)
+        except:
+            pass
+
+    def note_on(self, note = 60, velocity = 64, channel = 0):
+        print("note_on", note, velocity, channel)
+
+    def note_off(self, note = 60, channel = 0):
+        print("note_off", note, 0, channel)
+
+    def all_notes_off(self, channel = 0):
+        for n in range(128):
+            self.note_off(n, channel)
+
+    def control(self, control, value, channel = 0):
+        print("control", control, value, channel)
+
+    def __destroy__(self):
+        print('destroy')
+
 lookup = {}
 scale = {
     0:0,
@@ -62,30 +110,111 @@ except:
     logging.exception("could not connect to mqtt server")
     exit(1)
 
-def worker(queue, client, die_queue):
+def prime_sieve(n):
+    # returns all primes smaller than n
+    sieve = [True] * n
+    sieve[:2] = [False, False]  # 0 and 1 are not primes
+    primes = []
+    for prime, is_prime in enumerate(sieve):
+        if not is_prime:
+            continue
+        primes.append(prime)
+        for not_prime in range(prime*prime, n, prime):
+            sieve[not_prime] = False
+    return primes
 
+def sum_of_primes(value):
+    primes = prime_sieve(value)
+    lo = 0
+    hi = len(primes) - 1
+    while lo <= hi:
+        prime_sum = primes[lo] + primes[hi]
+        if prime_sum < value:
+            lo += 1
+        else:
+            if prime_sum == value:
+                yield primes[lo], primes[hi]
+            hi -= 1
+
+
+from isobar.io.midifile import MidiFileIn
+midifile = MidiFileIn(filename='childrens_corner1.mid')
+notes = midifile.read_note_list(filename='childrens_corner1.mid')
+
+learner = MarkovParallelLearners(3)
+clock0 = 0
+
+print("Awaiting MIDI clock signal...")
+
+for note in notes:
+    learner.register([ note.pitch, round(note.velocity, -1), note.duration ])
+
+
+def isobar_process(queue, serial_number, instrument):
+    print(serial_number,flush=True)
+    beats = int(serial_number[-3:-2], 16)
+
+
+    if not instrument:
+        print("instrument:", serial_number, 'not found')
+    print("instrument", instrument)
+    
+    chains = learner.chains()
+
+    pitch = chains[0]
+    amp   = chains[1]
+    dur   = chains[2]
+
+    if len(pitch.nodes) == 0:
+        print("No notes detected")
+    else:
+        t = Timeline(80, Print(queue, instrument))
+        t.sched({ 'note': pitch, 'dur': 0.1 + dur, 'amp': amp, 'channel': 0 }, count=(beats*4)+1)
+        t.run()
+
+def worker(queue, client, die_queue):
+    processes = []
     # The callback for when a PUBLISH message is received from the server.
     def on_message(client, userdata, msg):
         serial_number = msg.topic.split('/')[3]
+        instrument = lookup.get(serial_number, 7)
+
         try:
-            instrument = lookup[serial_number]
-            tone = scale.get((int(serial_number)) % 12 , 0) + (random.randint(-4,1)*12)
+            for p in [x for x in processes]:
+                try:
+                    p.join(timeout=0.000000001)
+                    if not p.is_alive():
+                        processes.remove(p)
+                except:
+                    pass
+            
+            if len(processes) < 2 and 10 > instrument > 4:
+                
+                print("starting new process", flush=True)
+                p = multiprocessing.Process(target=isobar_process, args=(queue, serial_number, instrument))
+                p.start()
+                processes.append(p)
+                print('started new process', flush=True)
+                
+            tone = scale.get((int(serial_number)) % 12 , 0) + (random.randint(-4,1)*12)+ (12*4)
             decay = (((int(serial_number)+ random.randint(0,15) ) %15) / 10) + 0.001
-            volume = min((((int(serial_number) / 20 + random.randint(0,20) ) %20) / 40) + 0.1, 0.4)
+            volume = min((((int(serial_number) / 20 + random.randint(0,20) ) %20) / 40) + 0.1, 0.2) 
 
             queue.put(json.dumps(dict(
                 tone=int(tone),
                 instrument=str(instrument),
                 decay=decay,
                 volume=volume
-            )), timeout=0.001)
-            if random.randint(0,10) > 8:
-                queue.put(json.dumps(dict(
-                    tone=int(tone) + 8,
-                    instrument=str(instrument),
-                    decay=decay
-                )), timeout=0.001)
+            )), timeout=0.1)
+            print("played tone freely")
+            # if random.randint(0,10) > 8:
+            #     queue.put(json.dumps(dict(
+            #         tone=int(tone) + 8,
+            #         instrument=str(instrument),
+            #         decay=decay
+            #     )), timeout=0.001)
         except:
+            logging.exception()
             pass
 
     client.on_message = on_message
