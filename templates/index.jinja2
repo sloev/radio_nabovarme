@@ -30,7 +30,8 @@
 	<script src='https://surikov.github.io/webaudiofontdata/sound/0100_FluidR3_GM_sf2_file.js'></script>
 	<script src='https://surikov.github.io/webaudiofontdata/sound/0750_FluidR3_GM_sf2_file.js'></script>
 	<script src='https://surikov.github.io/webaudiofontdata/sound/0350_GeneralUserGS_sf2_file.js'></script>
-	<script src='https://surikov.github.io/webaudiofontdata/sound/0120_FluidR3_GM_sf2_file.js'></script>
+	<script src='https://surikov.github.io/webaudiofontdata/sound/0120_FluidR3_GM_sf2_file.js'></script>12840_19_FluidR3_GM_sf2_file.js
+	<script src='https://surikov.github.io/webaudiofontdata/sound/12840_19_FluidR3_GM_sf2_file.js'></script>
 	<style>
 		.messages {
 
@@ -82,7 +83,7 @@
 		player.loader.decodeAfterLoading(audioContext, '_tone_0750_FluidR3_GM_sf2_file');
 		player.loader.decodeAfterLoading(audioContext, '_tone_0350_GeneralUserGS_sf2_file');
 		player.loader.decodeAfterLoading(audioContext, '_tone_0120_FluidR3_GM_sf2_file');
-
+		player.loader.decodeAfterLoading(audioContext, '_drum_40_19_FluidR3_GM_sf2_file'); //snare
 		var channelMaster = player.createChannel(audioContext);
 					var messages = [];
 
@@ -92,13 +93,13 @@
 		player.createReverberator(audioContext);
 		reverberator.output.connect(audioContext.destination);
 		var instrument_lookup = [{
-			'0': _drum_35_17_JCLive_sf2_file,
+			'0': _drum_40_19_FluidR3_GM_sf2_file,
 			'1': _drum_35_17_JCLive_sf2_file,
 			'2': _drum_35_17_JCLive_sf2_file,
-			'3': _tone_0120_FluidR3_GM_sf2_file,
-			'4': _tone_0120_FluidR3_GM_sf2_file,
+			'3': _drum_40_1_JCLive_sf2_file,
+			'4': _drum_40_1_JCLive_sf2_file,
 			'5': _drum_40_1_JCLive_sf2_file,
-			'6': _drum_40_1_JCLive_sf2_file,
+			'6': _tone_0120_FluidR3_GM_sf2_file,
 			'7': _tone_0120_FluidR3_GM_sf2_file,
 			'8': _tone_0120_FluidR3_GM_sf2_file,
 			'9': _tone_0750_FluidR3_GM_sf2_file,

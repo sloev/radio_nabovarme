@@ -150,9 +150,9 @@ for note in notes:
     learner.register([ note.pitch, round(note.velocity, -1), note.duration ])
 
 
-def isobar_process(queue, serial_number, instrument):
+def isobar_process_1(queue, serial_number, instrument):
     print(serial_number,flush=True)
-    beats = int(serial_number[-3:-2], 16)
+    beats = int(serial_number[-4:-2], 16) + 5
 
 
     if not instrument:
@@ -172,13 +172,64 @@ def isobar_process(queue, serial_number, instrument):
         t.sched({ 'note': pitch, 'dur': 0.1 + dur, 'amp': amp, 'channel': 0 }, count=(beats*4)+1)
         t.run()
 
+def isobar_process_2(queue, serial_number, instrument):
+    print(serial_number,flush=True)
+    beats = int(serial_number[-4:-2], 16) +5
+    seq = PLSys("N[+N+N]?N[-N]+N", depth = 3)
+
+    ppitch = PShuffle([ random.randint(-6, 6) for n in range(6) ])
+
+    ppitch = PPermut(ppitch)
+    ppitch = PDegree(ppitch, Key("F#", "pelog"))
+
+    # create permuted sets of durations and amplitudes
+    # different lengths mean poly-combinations
+    pdur = PShuffle([ 1, 1, 2, 2, 4 ], 1)
+    pdur  = PPermut(pdur) * 0.25
+
+    pamp = PShuffle([ 10, 15, 20, 35 ], 2)
+    pamp = PPermut(pamp) 
+
+    # schedule on a 60bpm timeline and send to MIDI output
+    timeline = Timeline(80, Print(queue, instrument))
+    timeline.sched({ 'note': ppitch + 12, 'dur': pdur, 'channel': 0, 'gate': 1, 'amp': pamp-3 }, count=beats)
+    timeline.sched({ 'note': ppitch + 24, 'dur': pdur * 4, 'channel': 1, 'gate': 2, 'amp': pamp -3 }, count=beats)
+    timeline.sched({ 'note': ppitch + 32, 'dur': pdur / 2, 'channel': 1, 'gate': 1, 'amp': (pamp / 2) - 3 }, count=beats)
+
+    timeline.run()
+
+def isobar_process_3(queue, serial_number, instrument):
+    beats = int(serial_number[-4:-2], 16) +5
+
+    notes = PLSys("N[+N--?N]+N[+?N]", depth = 4) 
+    notes = PDegree(notes, Scale.majorPenta)
+    notes = notes % 36 + 52
+    times = PLSys("[N+[NN]-N+N]+N-N+N", depth = 3)
+    times = PAbs(PDiff(times)) * 0.25
+    velocity = (PLSys("N+N[++N+N--N]-N[--N+N]") + PWhite(-4, 4)) * 8
+    velocity = PAbs(velocity)
+
+    timeline = Timeline(80, Print(queue, instrument))
+    def gen():
+        for i in notes * PEuclidean(5, 8) * times:
+            if i:
+                yield i + 10
+            yield None
+
+    timeline.sched({ 'note':  list(gen()), 'dur': 0.25 , 'amp': velocity + 3 }, count=beats)
+    timeline.run()
+
+
+
 def worker(queue, client, die_queue):
     processes = []
     # The callback for when a PUBLISH message is received from the server.
     def on_message(client, userdata, msg):
+
         serial_number = msg.topic.split('/')[3]
         instrument = lookup.get(serial_number, 7)
-
+        which_passage = int(serial_number[-2:], 16)
+        print(which_passage)
         try:
             for p in [x for x in processes]:
                 try:
@@ -188,10 +239,21 @@ def worker(queue, client, die_queue):
                 except:
                     pass
             
-            if len(processes) < 2 and 10 > instrument > 4:
+            if len(processes) < 4:
+                if which_passage > 100:
+                    print("starting new process 1", flush=True)
+                    p = multiprocessing.Process(target=isobar_process_1, args=(queue, serial_number, 11))
+                elif which_passage > 70 :
+                    print("starting new process 2", flush=True)
+                    p = multiprocessing.Process(target=isobar_process_2, args=(queue, serial_number, 8))
+                elif which_passage > 40 :
+                    print("starting new process 3", flush=True)
+                    p = multiprocessing.Process(target=isobar_process_3, args=(queue, serial_number, 2))
+                else:
+                    print("starting new process 4", flush=True)
+                    p = multiprocessing.Process(target=isobar_process_3, args=(queue, serial_number, 0))
+                        
                 
-                print("starting new process", flush=True)
-                p = multiprocessing.Process(target=isobar_process, args=(queue, serial_number, instrument))
                 p.start()
                 processes.append(p)
                 print('started new process', flush=True)
@@ -200,13 +262,12 @@ def worker(queue, client, die_queue):
             decay = (((int(serial_number)+ random.randint(0,15) ) %15) / 10) + 0.001
             volume = min((((int(serial_number) / 20 + random.randint(0,20) ) %20) / 40) + 0.1, 0.2) 
 
-            queue.put(json.dumps(dict(
-                tone=int(tone),
-                instrument=str(instrument),
-                decay=decay,
-                volume=volume
-            )), timeout=0.1)
-            print("played tone freely")
+            # queue.put(json.dumps(dict(
+            #     tone=int(tone),
+            #     instrument=str(0),
+            #     decay=decay,
+            #     volume=volume
+            # )), timeout=0.1)
             # if random.randint(0,10) > 8:
             #     queue.put(json.dumps(dict(
             #         tone=int(tone) + 8,
