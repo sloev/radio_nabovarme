@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-12T13:15:19.449Z",
+  "checkedAt": "2026-10-19T10:51:47.714Z",
   "seconds": 120,
   "sources": {
     "energinet-grid": {
@@ -139,11 +139,6 @@
     }
   },
   "hosts": {
-    "relay.primal.net": {
-      "websocket opened": 1,
-      "websocket error: WebSocket is closed before the connection is established.": 1,
-      "websocket closed": 1
-    },
     "relay.damus.io": {
       "websocket opened": 2,
       "websocket error: WebSocket is closed before the connection is established.": 1,
@@ -151,45 +146,28 @@
     },
     "ws-feed.exchange.coinbase.com": {
       "websocket opened": 1,
+      "websocket error: WebSocket is closed before the connection is established.": 1,
       "websocket closed": 1
     },
-    "offchain.pub": {
-      "websocket opened": 2,
-      "websocket closed": 2
+    "relay.primal.net": {
+      "websocket opened": 1,
+      "websocket error: WebSocket is closed before the connection is established.": 1,
+      "websocket closed": 1
     },
     "earthquake.usgs.gov": {
       "HTTP 200": 1
     },
-    "api.wheretheiss.at": {
-      "HTTP 200": 1
-    },
-    "gbfs.api.ridedott.com": {
-      "HTTP 200": 1,
-      "net::ERR_ABORTED": 1
-    },
-    "www.elprisenligenu.dk": {
-      "HTTP 200": 2
-    },
-    "raw.githubusercontent.com": {
-      "HTTP 200": 2
-    },
-    "nostr.mom": {
+    "offchain.pub": {
       "websocket opened": 1,
       "websocket closed": 1
     },
     "mempool.space": {
       "websocket opened": 1,
+      "websocket error: WebSocket is closed before the connection is established.": 1,
       "websocket closed": 1
     },
-    "data.vatsim.net": {
-      "HTTP 200": 1
-    },
-    "surikov.github.io": {
-      "HTTP 200": 3
-    },
-    "stream.wikimedia.org": {
-      "HTTP 200": 1,
-      "net::ERR_ABORTED": 1
+    "www.elprisenligenu.dk": {
+      "net::ERR_ABORTED": 2
     },
     "opendataapi.dmi.dk": {
       "net::ERR_ABORTED": 11
@@ -200,27 +178,33 @@
     "data.sensor.community": {
       "net::ERR_ABORTED": 1
     },
+    "gbfs.api.ridedott.com": {
+      "net::ERR_ABORTED": 1
+    },
+    "data.vatsim.net": {
+      "net::ERR_ABORTED": 1
+    },
+    "api.wheretheiss.at": {
+      "net::ERR_ABORTED": 1
+    },
     "webtorrent.io": {
       "net::ERR_ABORTED": 1
     },
-    "purplerelay.com": {
-      "websocket opened": 1
+    "raw.githubusercontent.com": {
+      "net::ERR_ABORTED": 2
+    },
+    "stream.wikimedia.org": {
+      "net::ERR_ABORTED": 1
+    },
+    "surikov.github.io": {
+      "HTTP 200": 1
     },
     "relay.agorist.space": {
       "websocket opened": 6,
       "websocket error: Error during WebSocket handshake: Unexpected response code: 502": 6,
       "websocket closed": 6
     },
-    "basspistol.org": {
-      "websocket opened": 1
-    },
-    "yabu.me": {
-      "websocket opened": 1
-    },
     "nostr-01.uid.ovh": {
-      "websocket opened": 1
-    },
-    "nostr.data.haus": {
       "websocket opened": 1
     },
     "nostr-01.yakihonne.com": {
@@ -230,6 +214,18 @@
       "websocket opened": 6,
       "websocket error: Error during WebSocket handshake: Unexpected response code: 503": 6,
       "websocket closed": 6
+    },
+    "purplerelay.com": {
+      "websocket opened": 1
+    },
+    "basspistol.org": {
+      "websocket opened": 1
+    },
+    "nostr.data.haus": {
+      "websocket opened": 1
+    },
+    "yabu.me": {
+      "websocket opened": 1
     }
   }
 }
